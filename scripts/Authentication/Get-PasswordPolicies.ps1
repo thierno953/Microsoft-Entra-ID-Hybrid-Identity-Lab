@@ -1,0 +1,6 @@
+Get-MgPolicyAuthorizationPolicy |
+Select-Object `
+AllowEmailVerifiedUsersToJoinOrganization,
+AllowedToSignUpEmailBasedSubscriptions,
+AllowInvitesFrom,
+DefaultUserRolePermissions
