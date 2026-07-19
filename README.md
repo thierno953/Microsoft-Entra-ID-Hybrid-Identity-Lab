@@ -37,7 +37,7 @@ The environment implements a hybrid identity model where:
 - Identity synchronization is performed using Microsoft Entra Connect Sync and Microsoft Entra Cloud Sync.
 - Authentication is secured through MFA and passwordless technologies.
 
-![Architecture](./assets/architecture/architecture.png)  
+![Architecture](./assets/architecture/architecture-diagram.png)
 
 ---
 
