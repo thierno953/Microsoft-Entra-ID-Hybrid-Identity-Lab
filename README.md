@@ -183,6 +183,20 @@ Configured:
 
 ---
 
+## Pass-Through Authentication High Availability
+
+Configured:
+
+- Multiple PTA authentication agents
+- Authentication redundancy
+- Authentication failover testing
+- High availability design for hybrid authentication
+
+![PTA Agents](./assets/hybrid/pta-agents.png)
+![PTA Agents](./assets/hybrid/pta-agents_details.png)
+
+---
+
 ## User Synchronization Validation
 
 Validated:
@@ -249,6 +263,18 @@ Configured:
 
 ---
 
+# Security Hardening
+
+Implemented:
+
+- TLS 1.2 enforcement for Microsoft Entra Connect
+- Secure communication configuration
+- Hybrid identity security hardening
+
+![TLS 1.2](./assets/security/tls12.png)
+
+---
+
 # Monitoring and Security Auditing
 
 Implemented:
@@ -303,6 +329,11 @@ Scripts:
 - Windows Server Administration
 - Identity Lifecycle Management
 - Identity Automation
+- Pass-Through Authentication (PTA)
+- PTA High Availability
+- Authentication Agent Redundancy
+- TLS 1.2 Hardening
+- Secure Hybrid Identity Design
 
 ---
 
