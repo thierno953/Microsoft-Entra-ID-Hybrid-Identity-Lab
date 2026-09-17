@@ -1,94 +1,61 @@
 # Microsoft Entra ID Hybrid Identity Lab
 
-Enterprise Identity and Access Management (IAM) lab demonstrating hybrid identity integration between on-premises Active Directory and Microsoft Entra ID.
+Hybrid Identity and Access Management lab integrating on-premises Active Directory with Microsoft Entra ID.
 
 ![Status](https://img.shields.io/badge/Status-Completed-brightgreen)
-![Platform](https://img.shields.io/badge/Microsoft-Entra_ID-blue)
-![Windows Server](https://img.shields.io/badge/Windows_Server-2022-blue)
-![PowerShell](https://img.shields.io/badge/PowerShell-Microsoft_Graph-important)
+![Microsoft Entra ID](https://img.shields.io/badge/Microsoft-Entra_ID-0078D4)
+![Windows Server 2022](https://img.shields.io/badge/Windows_Server-2022-0078D4)
+![Microsoft Graph](https://img.shields.io/badge/PowerShell-Microsoft_Graph-5391FE)
 
 ---
 
-# Overview
+## Overview
 
-This lab demonstrates the design and implementation of a hybrid identity infrastructure integrating on-premises Active Directory with Microsoft Entra ID.
+This lab demonstrates:
 
-The environment focuses on identity synchronization, secure authentication, device registration, access control, and administrative automation using Microsoft Graph PowerShell.
-
----
-
-# Objectives
-
-- Deploy a hybrid identity environment
-- Synchronize on-premises identities with Microsoft Entra ID
-- Implement secure authentication methods
-- Configure Hybrid Microsoft Entra Join
-- Apply Conditional Access security policies
-- Automate identity administration using PowerShell and Microsoft Graph
-
----
-
-# Architecture
-
-The environment implements a hybrid identity model where:
-
-- Active Directory acts as the authoritative identity source.
-- Microsoft Entra ID provides cloud identity services.
-- Identity synchronization is performed using Microsoft Entra Connect Sync and Microsoft Entra Cloud Sync.
-- Authentication is secured through MFA and passwordless technologies.
-
-![Architecture](./assets/architecture/architecture-diagram.png)
-
----
-
-# Identity Flow
-
-1. Users and groups are created in Active Directory.
-2. Objects are synchronized to Microsoft Entra ID.
-3. Authentication policies are applied through Conditional Access.
-4. Devices are registered using Hybrid Microsoft Entra Join.
-5. Administrators manage identities using Microsoft Graph PowerShell.
-
----
-
-# Lab Environment
-
-| Component                | Technology                                |
-| ------------------------ | ----------------------------------------- |
-| Identity Provider        | Microsoft Entra ID                        |
-| Directory Service        | Active Directory Domain Services          |
-| Server Platform          | Windows Server 2022                       |
-| Client Operating Systems | Windows 10 / Windows 11                   |
-| Synchronization          | Microsoft Entra Connect Sync / Cloud Sync |
-| Automation               | Microsoft Graph PowerShell                |
-| Authentication           | MFA / Passwordless / FIDO2                |
-
----
-
-# Key Features
-
-- Hybrid identity integration
-- User and group synchronization
-- Password Hash Synchronization
-- Seamless Single Sign-On
-- Hybrid Microsoft Entra Join
-- Conditional Access
+- Hybrid identity synchronization
+- Secure hybrid authentication
+- Microsoft Entra hybrid join
+- Conditional Access and MFA
 - Passwordless authentication
-- Device identity management
-- Microsoft Graph automation
+- RBAC and least privilege
+- Microsoft Graph PowerShell automation
 
 ---
 
-# Identity Management
+## Architecture
 
-## User Management
+- **Active Directory Domain Services:** authoritative identity source
+- **Entra Connect Sync:** primary synchronization service
+- **Entra Cloud Sync:** separate pilot OU without scope overlap
+- **Pass-Through Authentication:** primary authentication method
+- **Password Hash Synchronization:** resilience option
+- **Seamless SSO:** integrated domain authentication
+- **Microsoft Entra hybrid join:** domain device registration
 
-Implemented:
+---
 
-- User creation and administration
-- Password management
-- Bulk user provisioning using CSV files
-- Microsoft Graph PowerShell automation
+## Lab Environment
+
+| Component       | Technology                            |
+| --------------- | ------------------------------------- |
+| Cloud identity  | Microsoft Entra ID                    |
+| Directory       | Active Directory Domain Services      |
+| Server          | Windows Server 2022                   |
+| Client          | Windows 11                            |
+| Synchronization | Entra Connect Sync / Cloud Sync pilot |
+| Authentication  | PTA / PHS / Seamless SSO              |
+| Security        | MFA / FIDO2 / Conditional Access      |
+| Automation      | Microsoft Graph PowerShell            |
+
+---
+
+## Identity Management
+
+- User and group administration
+- Password reset
+- Bulk user provisioning from CSV
+- Identity lifecycle automation
 
 ![Create User](./assets/users/create-user.png)
 
@@ -98,13 +65,12 @@ Implemented:
 
 ---
 
-# Role-Based Access Control (RBAC)
-
-Implemented:
+## Role-Based Access Control
 
 - Administrative role assignments
-- Least privilege administration model
-- Delegated administrative access
+- Least-privilege access
+- Separate privileged accounts
+- Delegated administration
 
 ![Directory Roles](./assets/rbac/directory-roles-overview.png)
 
@@ -112,40 +78,28 @@ Implemented:
 
 ---
 
-# Authentication Security
-
-## Multi-Factor Authentication (MFA)
-
-Configured:
+## Authentication Security
 
 - Microsoft Authenticator
-- Phone authentication
-- Temporary Access Pass (TAP)
-- Authentication method policies
+- Temporary Access Pass
+- FIDO2 security keys
+- Windows Hello for Business
+- Authentication strength policies
 
 ![Authentication Methods](./assets/security/authentication-methods.png)
 
----
-
-## Passwordless Authentication
-
-Configured:
-
-- Passwordless sign-in methods
-- FIDO2 security keys
-- Authentication strengths and policies
-
-![Passwordless](./assets/security/passwordless.png)
+![Passwordless Authentication](./assets/security/passwordless.png)
 
 ---
 
-# Conditional Access
+## Conditional Access
 
-Implemented security policies including:
-
-- Require MFA for users
-- Protect privileged administrative accounts
-- Block legacy authentication protocols
+- Require MFA
+- Protect privileged accounts
+- Block legacy authentication
+- Protect administrative portals
+- Test policies in Report-only mode
+- Exclude and monitor emergency access accounts
 
 ![Conditional Access](./assets/security/conditional-access.png)
 
@@ -153,193 +107,175 @@ Implemented security policies including:
 
 ---
 
-# Device Identity
-
-Implemented:
+## Device Identity
 
 - Microsoft Entra device registration
-- Device identity management
-- Local administrator management
+- Microsoft Entra hybrid join
+- Device identity validation
+- Windows LAPS
+- Local administrator control
 
-![Device](./assets/devices/entra-device.png)
+![Entra Device](./assets/devices/entra-device.png)
 
-![Local Admin](./assets/devices/local-admin.png)
+![Local Administrator](./assets/devices/local-admin.png)
 
 ---
 
-# Hybrid Identity Implementation
+## Hybrid Identity
 
-## Microsoft Entra Connect Sync
-
-Configured:
+### Microsoft Entra Connect Sync
 
 - Active Directory synchronization
-- Password Hash Synchronization (PHS)
-- Pass-Through Authentication (PTA)
-- Seamless Single Sign-On (SSO)
 - Organizational Unit filtering
+- Pass-Through Authentication
+- Password Hash Synchronization
+- Seamless Single Sign-On
+
+PTA is the primary method. PHS is enabled as a resilience option; failover requires an administrative change.
 
 ![Entra Connect](./assets/hybrid/entra-connect.png)
 
----
+### PTA High Availability
 
-## Pass-Through Authentication High Availability
-
-Configured:
-
-- Multiple PTA authentication agents
-- Authentication redundancy
-- Authentication failover testing
-- High availability design for hybrid authentication
+- Multiple authentication agents
+- Agent redundancy
+- Failover testing
+- Agent status monitoring
 
 ![PTA Agents](./assets/hybrid/pta-agents.png)
-![PTA Agents](./assets/hybrid/pta-agents_details.png)
 
----
+![PTA Agent Details](./assets/hybrid/pta-agents_details.png)
 
-## User Synchronization Validation
+### Synchronization Validation
 
-Validated:
-
-- User objects synchronized from Active Directory
-- Source of authority verification
-- Hybrid identity confirmation
+- Synchronized AD users visible in Entra ID
+- On-premises source of authority confirmed
+- Expected attributes validated
 
 ![Synced User](./assets/hybrid/synced-user.png)
 
----
+### Organizational Unit Filtering
 
-## Organizational Unit Filtering
-
-Configured:
-
-- Synchronization scope limitation
-- Controlled object synchronization
-- OU-based filtering
+- Dedicated synchronization OUs
+- Non-required objects excluded
+- Synchronization scope validated
 
 ![OU Filtering](./assets/hybrid/ou-filtering.png)
 
----
+### Microsoft Entra Cloud Sync
 
-## Microsoft Entra Cloud Sync
-
-Configured:
-
-- Cloud Sync Provisioning Agent
-- Synchronization configuration
-- Provisioning validation and monitoring
+Cloud Sync was tested on a separate pilot OU without overlap with Entra Connect Sync.
 
 ![Cloud Sync](./assets/hybrid/cloud-sync.png)
 
----
+### Microsoft Entra Hybrid Join
 
-## Hybrid Microsoft Entra Join
-
-Configured:
-
-- Hybrid device registration
-- Device authentication
-- Device synchronization validation
+- Service Connection Point
+- Device registration through Group Policy
+- Computer object synchronization
+- Primary Refresh Token validation
 
 ![Hybrid Join](./assets/hybrid/hybrid-join.png)
 
 ![Device Registration](./assets/hybrid/hybrid-device-registration.png)
 
-### Validation
+```text
+AzureAdJoined : YES
+DomainJoined  : YES
+AzureAdPrt    : YES
+```
 
-![Hybrid Join Validation](./assets/hybrid/dsregcmd-status.png)
+![dsregcmd Validation](./assets/hybrid/dsregcmd-status.png)
+
+### Seamless Single Sign-On
+
+- Kerberos-based SSO
+- Domain workstation authentication
+- Integrated Microsoft Entra sign-in
+
+![Seamless SSO](./assets/hybrid/sso.png)
 
 ---
 
-## Seamless Single Sign-On
+## Security Hardening
 
-Configured:
-
-- Seamless SSO authentication flow
-- Kerberos-based authentication
-- Domain authentication validation
-
-![SSO](./assets/hybrid/sso.png)
-
----
-
-# Security Hardening
-
-Implemented:
-
-- TLS 1.2 enforcement for Microsoft Entra Connect
-- Secure communication configuration
-- Hybrid identity security hardening
+- TLS 1.2 enforcement
+- Least-privilege administration
+- Emergency access accounts
+- Phishing-resistant authentication for administrators
+- Restricted access to synchronization servers
+- Sign-in and audit monitoring
 
 ![TLS 1.2](./assets/security/tls12.png)
 
 ---
 
-# Monitoring and Security Auditing
+## Monitoring and Auditing
 
-Implemented:
-
-- Sign-in monitoring
-- Authentication log analysis
-- Failed login investigations
-- Session revocation and user risk analysis
+- Sign-in and failed authentication analysis
+- Conditional Access result analysis
+- Synchronization and PTA agent monitoring
+- Session revocation
 
 ![Sign-in Logs](./assets/security/signin-logs.png)
 
 ---
 
-# PowerShell Automation
+## PowerShell Automation
 
-Administrative tasks were automated using Microsoft Graph PowerShell.
+- Bulk user provisioning
+- User and group management
+- Role reporting
+- Device inventory
+- Security and tenant reporting
 
-Implemented scenarios:
+```text
+scripts/
+├── Authentication/
+├── Devices/
+├── Groups/
+├── Roles/
+├── Security/
+├── Tenant/
+└── Users/New-BulkUsers.ps1
+```
 
-- Bulk user creation
-- User lifecycle management
-- Identity administration automation
-- Microsoft Entra management scripting
-
-Scripts:
-
-- `scripts/Authentication/`
-- `scripts/Users/New-BulkUsers.ps1`
-- `scripts/Groups/`
-- `scripts/Roles/`
-- `scripts/Devices/`
-- `scripts/Security/`
-- `scripts/Tenant/`
-
----
-
-# Skills Demonstrated
-
-- Microsoft Entra ID
-- Active Directory Domain Services
-- Hybrid Identity
-- Microsoft Entra Connect Sync
-- Microsoft Entra Cloud Sync
-- Hybrid Microsoft Entra Join
-- Conditional Access
-- Multi-Factor Authentication (MFA)
-- Passwordless Authentication
-- FIDO2 Security Keys
-- Role-Based Access Control (RBAC)
-- Device Identity Management
-- Microsoft Graph PowerShell SDK
-- Windows Server Administration
-- Identity Lifecycle Management
-- Identity Automation
-- Pass-Through Authentication (PTA)
-- PTA High Availability
-- Authentication Agent Redundancy
-- TLS 1.2 Hardening
-- Secure Hybrid Identity Design
+Scripts use minimum Graph permissions, input validation, error handling, and no plaintext credentials.
 
 ---
 
-# References
+## Validation Results
 
-- https://learn.microsoft.com/en-us/entra/identity/
-- https://learn.microsoft.com/en-us/entra/identity/hybrid/
-- https://learn.microsoft.com/en-us/powershell/microsoftgraph/
-- https://learn.microsoft.com/en-us/entra/identity/devices/
+| Test                                   | Status |
+| -------------------------------------- | :----: |
+| User and group synchronization         |  PASS  |
+| OU filtering                           |  PASS  |
+| PTA authentication and agent failover  |  PASS  |
+| Seamless SSO                           |  PASS  |
+| Microsoft Entra hybrid join and PRT    |  PASS  |
+| MFA enforcement                        |  PASS  |
+| Legacy authentication blocked          |  PASS  |
+| Cloud Sync pilot without scope overlap |  PASS  |
+
+---
+
+## Skills Demonstrated
+
+- Microsoft Entra ID and Active Directory
+- Hybrid Identity, Entra Connect Sync and Cloud Sync
+- PTA, PHS and Seamless SSO
+- Microsoft Entra hybrid join
+- Conditional Access, MFA and FIDO2
+- RBAC and Windows LAPS
+- Microsoft Graph PowerShell
+- Identity monitoring and automation
+
+---
+
+## References
+
+- [Microsoft Entra](https://learn.microsoft.com/en-us/entra/)
+- [Hybrid Identity](https://learn.microsoft.com/en-us/entra/identity/hybrid/)
+- [Authentication Methods](https://learn.microsoft.com/en-us/entra/identity/hybrid/connect/choose-ad-authn)
+- [Conditional Access](https://learn.microsoft.com/en-us/entra/identity/conditional-access/)
+- [Microsoft Graph PowerShell](https://learn.microsoft.com/en-us/powershell/microsoftgraph/)
