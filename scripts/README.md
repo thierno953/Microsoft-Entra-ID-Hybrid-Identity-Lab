@@ -142,6 +142,26 @@ $Results
 DisplayName,UserPrincipalName,MailNickname,GivenName,Surname,Department,JobTitle
 Jean Dupont,jean.dupont@contoso.onmicrosoft.com,jean.dupont,Jean,Dupont,IT,System Administrator
 Marie Martin,marie.martin@contoso.onmicrosoft.com,marie.martin,Marie,Martin,Finance,Accountant
+Sophie Lambert,sophie.lambert@contoso.onmicrosoft.com,sophie.lambert,Sophie,Lambert,Human Resources,HR Manager
+Thomas Bernard,thomas.bernard@contoso.onmicrosoft.com,thomas.bernard,Thomas,Bernard,IT,Network Administrator
+Julie Dubois,julie.dubois@contoso.onmicrosoft.com,julie.dubois,Julie,Dubois,Finance,Financial Analyst
+Nicolas Leroy,nicolas.leroy@contoso.onmicrosoft.com,nicolas.leroy,Nicolas,Leroy,IT,Cloud Administrator
+Camille Simon,camille.simon@contoso.onmicrosoft.com,camille.simon,Camille,Simon,Marketing,Marketing Specialist
+Lucas Michel,lucas.michel@contoso.onmicrosoft.com,lucas.michel,Lucas,Michel,Sales,Sales Representative
+Emma Laurent,emma.laurent@contoso.onmicrosoft.com,emma.laurent,Emma,Laurent,Human Resources,HR Assistant
+Hugo Leclerc,hugo.leclerc@contoso.onmicrosoft.com,hugo.leclerc,Hugo,Leclerc,IT,Security Analyst
+Laura Robert,laura.robert@contoso.onmicrosoft.com,laura.robert,Laura,Robert,Legal,Legal Advisor
+Antoine Moreau,antoine.moreau@contoso.onmicrosoft.com,antoine.moreau,Antoine,Moreau,Operations,Operations Manager
+Chloe Petit,chloe.petit@contoso.onmicrosoft.com,chloe.petit,Chloe,Petit,Customer Support,Support Technician
+Maxime Fontaine,maxime.fontaine@contoso.onmicrosoft.com,maxime.fontaine,Maxime,Fontaine,IT,Helpdesk Technician
+Sarah Lefevre,sarah.lefevre@contoso.onmicrosoft.com,sarah.lefevre,Sarah,Lefevre,Finance,Payroll Specialist
+Alexandre Girard,alexandre.girard@contoso.onmicrosoft.com,alexandre.girard,Alexandre,Girard,IT,DevSecOps Engineer
+Manon Rousseau,manon.rousseau@contoso.onmicrosoft.com,manon.rousseau,Manon,Rousseau,Marketing,Content Manager
+Louis Mercier,louis.mercier@contoso.onmicrosoft.com,louis.mercier,Louis,Mercier,Sales,Account Manager
+Lea Fournier,lea.fournier@contoso.onmicrosoft.com,lea.fournier,Lea,Fournier,Administration,Administrative Assistant
+Gabriel Andre,gabriel.andre@contoso.onmicrosoft.com,gabriel.andre,Gabriel,Andre,IT,Application Administrator
+Clara Garcia,clara.garcia@contoso.onmicrosoft.com,clara.garcia,Clara,Garcia,Project Management,Project Manager
+Nathan Muller,nathan.muller@contoso.onmicrosoft.com,nathan.muller,Nathan,Muller,IT,Database Administrator
 ```
 
 Test
