@@ -237,7 +237,7 @@ scripts/
 ├── Roles/
 ├── Security/
 ├── Tenant/
-└── Users/New-BulkUsers.ps1
+└── Users/
 ```
 
 Scripts use minimum Graph permissions, input validation, error handling, and no plaintext credentials.
@@ -248,36 +248,27 @@ Microsoft Entra ID administration was automated using the Microsoft Graph PowerS
 
 ```text
 scripts/
+├── Common/
+│   └── Connect-Graph.ps1
 ├── Authentication/
-│   ├── Get-AuthenticationMethods.ps1
-│   ├── Get-MFAStatus.ps1
-│   └── Get-PasswordlessUsers.ps1
+│   └── Get-MFAStatus.ps1
 ├── Devices/
-│   ├── Get-EntraDevices.ps1
-│   ├── Get-HybridJoinedDevices.ps1
-│   └── Get-StaleDevices.ps1
+│   └── Get-HybridJoinedDevices.ps1
 ├── Groups/
-│   ├── New-BulkGroups.ps1
-│   ├── Add-BulkGroupMembers.ps1
 │   └── Get-GroupMembers.ps1
 ├── Roles/
-│   ├── Get-DirectoryRoles.ps1
-│   ├── Get-RoleAssignments.ps1
-│   └── Export-PrivilegedUsers.ps1
+│   └── Get-RoleAssignments.ps1
 ├── Security/
 │   ├── Get-SignInLogs.ps1
-│   ├── Get-ConditionalAccessPolicies.ps1
-│   ├── Get-RiskyUsers.ps1
-│   └── Revoke-UserSessions.ps1
+│   └── Get-ConditionalAccessPolicies.ps1
 ├── Tenant/
-│   ├── Get-TenantInformation.ps1
-│   ├── Get-TenantLicenses.ps1
-│   └── Export-TenantConfiguration.ps1
+│   └── Get-TenantInformation.ps1
 └── Users/
     ├── New-BulkUsers.ps1
     ├── Get-EntraUsers.ps1
-    ├── Disable-User.ps1
-    └── Reset-UserPassword.ps1
+    └── Disable-User.ps1
+```
+
 ---
 
 ## Validation Results
