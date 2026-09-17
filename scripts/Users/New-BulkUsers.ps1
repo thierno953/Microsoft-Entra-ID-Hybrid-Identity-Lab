@@ -1,11 +1,3 @@
-<#
-.SYNOPSIS
-Creates Microsoft Entra ID users from a CSV file.
-
-.REQUIRED PERMISSION
-User.ReadWrite.All
-#>
-
 [CmdletBinding(SupportsShouldProcess)]
 param (
     [Parameter(Mandatory)]
@@ -17,12 +9,16 @@ param (
 
 $ErrorActionPreference = "Stop"
 
+. "$PSScriptRoot\..\Common\Connect-Graph.ps1"
+
+Connect-Graph -Scopes "User.ReadWrite.All"
+
 function New-TemporaryPassword {
-    $Upper = "ABCDEFGHJKLMNPQRSTUVWXYZ"
-    $Lower = "abcdefghijkmnopqrstuvwxyz"
+    $Upper   = "ABCDEFGHJKLMNPQRSTUVWXYZ"
+    $Lower   = "abcdefghijkmnopqrstuvwxyz"
     $Numbers = "23456789"
     $Symbols = "!@#$%*-_"
-    $All = $Upper + $Lower + $Numbers + $Symbols
+    $All     = $Upper + $Lower + $Numbers + $Symbols
 
     $Characters = @(
         $Upper[(Get-Random -Maximum $Upper.Length)]
@@ -38,99 +34,50 @@ function New-TemporaryPassword {
     return -join ($Characters | Sort-Object { Get-Random })
 }
 
-# Microsoft Graph module
-if (-not (Get-Module -ListAvailable Microsoft.Graph.Users)) {
-    throw "Install the module: Install-Module Microsoft.Graph.Users -Scope CurrentUser"
-}
-
-Import-Module Microsoft.Graph.Users
-
-if (-not (Get-MgContext)) {
-    Connect-MgGraph -Scopes "User.ReadWrite.All" -NoWelcome
-}
-
-$Users = Import-Csv -Path $CsvPath
-
-$RequiredColumns = @(
-    "DisplayName",
-    "UserPrincipalName",
-    "MailNickname",
-    "GivenName",
-    "Surname"
-)
-
-foreach ($Column in $RequiredColumns) {
-    if ($Column -notin $Users[0].PSObject.Properties.Name) {
-        throw "Missing CSV column: $Column"
-    }
-}
-
-$Results = foreach ($User in $Users) {
+$Results = foreach ($User in Import-Csv $CsvPath) {
     try {
-        $Upn = $User.UserPrincipalName.Trim()
-        $EscapedUpn = $Upn.Replace("'", "''")
-
-        $ExistingUser = Get-MgUser `
-            -Filter "userPrincipalName eq '$EscapedUpn'" `
-            -ErrorAction Stop
-
-        if ($ExistingUser) {
-            Write-Warning "User already exists: $Upn"
-
-            [PSCustomObject]@{
-                DisplayName       = $User.DisplayName
-                UserPrincipalName = $Upn
-                TemporaryPassword = ""
-                Status            = "Skipped"
-            }
-
-            continue
-        }
-
-        $TemporaryPassword = New-TemporaryPassword
+        $Password = New-TemporaryPassword
 
         $Parameters = @{
             AccountEnabled    = $true
-            DisplayName       = $User.DisplayName.Trim()
-            UserPrincipalName = $Upn
-            MailNickname      = $User.MailNickname.Trim()
-            GivenName         = $User.GivenName.Trim()
-            Surname           = $User.Surname.Trim()
+            DisplayName       = $User.DisplayName
+            UserPrincipalName = $User.UserPrincipalName
+            MailNickname      = $User.MailNickname
+            GivenName         = $User.GivenName
+            Surname           = $User.Surname
 
-            PasswordProfile   = @{
-                Password                      = $TemporaryPassword
+            PasswordProfile = @{
+                Password                      = $Password
                 ForceChangePasswordNextSignIn = $true
             }
         }
 
         if ($User.Department) {
-            $Parameters.Department = $User.Department.Trim()
+            $Parameters.Department = $User.Department
         }
 
         if ($User.JobTitle) {
-            $Parameters.JobTitle = $User.JobTitle.Trim()
+            $Parameters.JobTitle = $User.JobTitle
         }
 
-        if ($PSCmdlet.ShouldProcess($Upn, "Create Entra ID user")) {
+        if ($PSCmdlet.ShouldProcess(
+            $User.UserPrincipalName,
+            "Create Microsoft Entra user"
+        )) {
             New-MgUser -BodyParameter $Parameters | Out-Null
-            Write-Host "Created: $Upn" -ForegroundColor Green
 
             [PSCustomObject]@{
-                DisplayName       = $User.DisplayName
-                UserPrincipalName = $Upn
-                TemporaryPassword = $TemporaryPassword
+                UserPrincipalName = $User.UserPrincipalName
+                TemporaryPassword = $Password
                 Status            = "Created"
             }
         }
     }
     catch {
-        Write-Error "Failed to create $($User.UserPrincipalName): $($_.Exception.Message)"
-
         [PSCustomObject]@{
-            DisplayName       = $User.DisplayName
             UserPrincipalName = $User.UserPrincipalName
             TemporaryPassword = ""
-            Status            = "Failed"
+            Status            = "Failed: $($_.Exception.Message)"
         }
     }
 }
@@ -140,5 +87,6 @@ $Results | Export-Csv `
     -NoTypeInformation `
     -Encoding UTF8
 
-Write-Host "`nResults saved to: $ResultPath" -ForegroundColor Cyan
-Write-Warning "The results file contains temporary passwords. Protect or delete it after use."
+Write-Warning "Protect and delete $ResultPath after use."
+
+$Results

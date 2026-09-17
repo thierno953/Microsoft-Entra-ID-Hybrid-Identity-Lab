@@ -1,19 +1,23 @@
 [CmdletBinding()]
 param (
+    [Parameter(Mandatory)]
+    [string]$GroupId,
+
     [string]$OutputPath
 )
 
 . "$PSScriptRoot\..\Common\Connect-Graph.ps1"
 
-Connect-Graph -Scopes "Policy.Read.All"
+Connect-Graph -Scopes "GroupMember.Read.All"
 
-$Results = Get-MgIdentityConditionalAccessPolicy -All |
+$Results = Get-MgGroupMemberAsUser `
+    -GroupId $GroupId `
+    -All `
+    -Property Id,DisplayName,UserPrincipalName |
     Select-Object `
         Id,
         DisplayName,
-        State,
-        CreatedDateTime,
-        ModifiedDateTime
+        UserPrincipalName
 
 if ($OutputPath) {
     $Results | Export-Csv `
