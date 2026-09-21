@@ -223,28 +223,19 @@ AzureAdPrt    : YES
 
 ## PowerShell Automation
 
+Microsoft Entra ID administration was automated using the **Microsoft Graph PowerShell SDK**.
+
+Automation covers:
+
 - Bulk user provisioning
 - User and group management
 - Role reporting
 - Device inventory
-- Security and tenant reporting
-
-```text
-scripts/
-├── Authentication/
-├── Devices/
-├── Groups/
-├── Roles/
-├── Security/
-├── Tenant/
-└── Users/
-```
-
-Scripts use minimum Graph permissions, input validation, error handling, and no plaintext credentials.
-
-## PowerShell Automation
-
-Microsoft Entra ID administration was automated using the Microsoft Graph PowerShell SDK.
+- MFA status reporting
+- Conditional Access reporting
+- Sign-in log analysis
+- Tenant information
+- User lifecycle operations
 
 ```text
 scripts/
@@ -268,6 +259,15 @@ scripts/
     ├── Get-EntraUsers.ps1
     └── Disable-User.ps1
 ```
+
+Scripts follow these principles:
+
+- Minimum required Microsoft Graph permissions
+- Input validation
+- Error handling
+- Reusable connection logic
+- No plaintext credentials
+- Least-privilege administration
 
 ---
 
