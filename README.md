@@ -115,11 +115,7 @@ scripts/
     └── Disable-User.ps1
 ```
 
-Script source and execution examples are not reproduced in this README. MFA registration reporting is distinct from MFA enforcement validation.
-
 ## Validation Results
-
-Results reported by the lab author. Configuration screenshots illustrate the setup; detailed test logs and traces are not yet published.
 
 | Test                                   | Result |
 | -------------------------------------- | :----: |
@@ -140,17 +136,11 @@ Results reported by the lab author. Configuration screenshots illustrate the set
 - **Conditional Access lockout:** use emergency access, inspect the policy and retest after correction.
 - **Device issues:** inspect dsregcmd, registration logs and device synchronization.
 
-These are operational guidelines; the validation table does not claim that every recovery procedure has been tested.
-
 Monitoring references:
 
 [Sign-in logs](./assets/security/signin-logs.png)
 
 [TLS configuration](./assets/security/tls12.png).
-
-## Scope
-
-Completed lab, not a production-readiness certification. Sanitize published evidence and document deployed versions, licensing, backup and recovery before production use.
 
 ## Documentation
 
