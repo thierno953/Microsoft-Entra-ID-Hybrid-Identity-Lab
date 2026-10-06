@@ -9,8 +9,6 @@
 
 **Implemented:** hybrid synchronization, authentication, device identity, Conditional Access and identity administration.
 
-**Validation:** tests completed and validated in the lab, as reported by the lab author. Detailed test evidence is not yet published in this repository.
-
 ## Architecture
 
 - **AD DS:** source of authority for synchronized identities.
