@@ -1,25 +1,13 @@
+#requires -Version 7.2
 [CmdletBinding()]
-param (
-    [string]$OutputPath
+param(
+    [Parameter(Mandatory)][guid]$TenantId,
+    [string]$OutputPath,
+    [switch]$UseDeviceCode
 )
+. (Join-Path $PSScriptRoot '../Common/Connect-Graph.ps1')
+Connect-LabGraph -TenantId $TenantId -Scopes @('Policy.Read.All') -UseDeviceCode:$UseDeviceCode
 
-. "$PSScriptRoot\..\Common\Connect-Graph.ps1"
-
-Connect-Graph -Scopes "Policy.Read.All"
-
-$Results = Get-MgIdentityConditionalAccessPolicy -All |
-    Select-Object `
-        Id,
-        DisplayName,
-        State,
-        CreatedDateTime,
-        ModifiedDateTime
-
-if ($OutputPath) {
-    $Results | Export-Csv `
-        -Path $OutputPath `
-        -NoTypeInformation `
-        -Encoding UTF8
-}
-
-$Results
+$data = @(Get-LabGraphCollection -Uri 'https://graph.microsoft.com/v1.0/identity/conditionalAccess/policies')
+# Configuration export, not a runtime enforcement test.
+Write-LabReport -Data $data -OutputPath $OutputPath -Format Json

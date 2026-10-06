@@ -1,33 +1,14 @@
+#requires -Version 7.2
 [CmdletBinding()]
-param (
-    [string]$OutputPath
+param(
+    [Parameter(Mandatory)][guid]$TenantId,
+    [string]$OutputPath,
+    [switch]$UseDeviceCode
 )
+. (Join-Path $PSScriptRoot '../Common/Connect-Graph.ps1')
+Connect-LabGraph -TenantId $TenantId -Scopes @('Device.Read.All') -UseDeviceCode:$UseDeviceCode
 
-. "$PSScriptRoot\..\Common\Connect-Graph.ps1"
-
-Connect-Graph -Scopes "Device.Read.All"
-
-$Results = Get-MgDevice `
-    -All `
-    -Property DisplayName,DeviceId,OperatingSystem,
-              OperatingSystemVersion,TrustType,
-              AccountEnabled,ApproximateLastSignInDateTime |
-    Where-Object {
-        $_.TrustType -eq "ServerAd"
-    } |
-    Select-Object `
-        DisplayName,
-        DeviceId,
-        OperatingSystem,
-        OperatingSystemVersion,
-        AccountEnabled,
-        ApproximateLastSignInDateTime
-
-if ($OutputPath) {
-    $Results | Export-Csv `
-        -Path $OutputPath `
-        -NoTypeInformation `
-        -Encoding UTF8
-}
-
-$Results
+$uri = 'https://graph.microsoft.com/v1.0/devices?$filter=trustType%20eq%20%27ServerAd%27&$select=id,deviceId,displayName,trustType,accountEnabled,operatingSystem,operatingSystemVersion,onPremisesSyncEnabled,approximateLastSignInDateTime'
+$data = @(Get-LabGraphCollection -Uri $uri | ForEach-Object { [pscustomobject]$_ })
+# ServerAd identifies hybrid device records; this does not validate a user's PRT.
+Write-LabReport -Data $data -OutputPath $OutputPath

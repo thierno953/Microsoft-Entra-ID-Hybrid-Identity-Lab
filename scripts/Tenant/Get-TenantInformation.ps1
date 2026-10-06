@@ -1,19 +1,12 @@
+#requires -Version 7.2
 [CmdletBinding()]
-param ()
+param(
+    [Parameter(Mandatory)][guid]$TenantId,
+    [string]$OutputPath,
+    [switch]$UseDeviceCode
+)
+. (Join-Path $PSScriptRoot '../Common/Connect-Graph.ps1')
+Connect-LabGraph -TenantId $TenantId -Scopes @('Organization.Read.All') -UseDeviceCode:$UseDeviceCode
 
-. "$PSScriptRoot\..\Common\Connect-Graph.ps1"
-
-Connect-Graph -Scopes "Organization.Read.All"
-
-Get-MgOrganization |
-    Select-Object `
-        Id,
-        DisplayName,
-        CreatedDateTime,
-        OnPremisesSyncEnabled,
-        @{
-            Name       = "VerifiedDomains"
-            Expression = {
-                $_.VerifiedDomains.Name -join ";"
-            }
-        }
+$data = @(Get-LabGraphCollection -Uri 'https://graph.microsoft.com/v1.0/organization')
+Write-LabReport -Data $data -OutputPath $OutputPath -Format Json

@@ -1,31 +1,13 @@
+#requires -Version 7.2
 [CmdletBinding()]
-param (
-    [string]$OutputPath
+param(
+    [Parameter(Mandatory)][guid]$TenantId,
+    [string]$OutputPath,
+    [switch]$UseDeviceCode
 )
+. (Join-Path $PSScriptRoot '../Common/Connect-Graph.ps1')
+Connect-LabGraph -TenantId $TenantId -Scopes @('User.Read.All') -UseDeviceCode:$UseDeviceCode
 
-. "$PSScriptRoot\..\Common\Connect-Graph.ps1"
-
-Connect-Graph -Scopes "User.Read.All"
-
-$Results = Get-MgUser `
-    -All `
-    -Property Id,DisplayName,UserPrincipalName,AccountEnabled,
-              UserType,Department,JobTitle,OnPremisesSyncEnabled |
-    Select-Object `
-        DisplayName,
-        UserPrincipalName,
-        AccountEnabled,
-        UserType,
-        Department,
-        JobTitle,
-        OnPremisesSyncEnabled,
-        Id
-
-if ($OutputPath) {
-    $Results | Export-Csv `
-        -Path $OutputPath `
-        -NoTypeInformation `
-        -Encoding UTF8
-}
-
-$Results
+$uri = 'https://graph.microsoft.com/v1.0/users?$select=id,displayName,userPrincipalName,accountEnabled,userType,department,jobTitle,onPremisesSyncEnabled,onPremisesImmutableId'
+$data = @(Get-LabGraphCollection -Uri $uri | ForEach-Object { [pscustomobject]$_ })
+Write-LabReport -Data $data -OutputPath $OutputPath

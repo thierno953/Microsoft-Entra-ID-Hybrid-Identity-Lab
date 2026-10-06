@@ -1,48 +1,20 @@
+#requires -Version 7.2
 [CmdletBinding()]
-param (
-    [string]$OutputPath
+param(
+    [Parameter(Mandatory)][guid]$TenantId,
+    [string]$OutputPath,
+    [switch]$UseDeviceCode
 )
+. (Join-Path $PSScriptRoot '../Common/Connect-Graph.ps1')
+Connect-LabGraph -TenantId $TenantId -Scopes @('AuditLog.Read.All') -UseDeviceCode:$UseDeviceCode
 
-. "$PSScriptRoot\..\Common\Connect-Graph.ps1"
-
-Connect-Graph -Scopes `
-    "User.Read.All",
-    "UserAuthenticationMethod.Read.All"
-
-$Results = foreach ($User in Get-MgUser -All) {
-    try {
-        $Methods = Get-MgUserAuthenticationMethod `
-            -UserId $User.Id `
-            -All
-
-        $MethodTypes = @(
-            $Methods.AdditionalProperties."@odata.type"
-        )
-
-        [PSCustomObject]@{
-            DisplayName       = $User.DisplayName
-            UserPrincipalName = $User.UserPrincipalName
-            MFARegistered     = ($MethodTypes.Count -gt 1)
-            Methods           = (
-                ($MethodTypes -replace "#microsoft.graph.", "") -join ";"
-            )
-        }
+# Registration/capability report, NOT proof of enforced MFA.
+$data = @(Get-LabGraphCollection -Uri 'https://graph.microsoft.com/v1.0/reports/authenticationMethods/userRegistrationDetails' | ForEach-Object {
+    [pscustomobject]@{
+        Id = $_['id']; UserPrincipalName = $_['userPrincipalName']; DisplayName = $_['userDisplayName']
+        IsMfaRegistered = $_['isMfaRegistered']; IsMfaCapable = $_['isMfaCapable']
+        IsPasswordlessCapable = $_['isPasswordlessCapable']
+        MethodsRegistered = @($_['methodsRegistered']) -join ';'
     }
-    catch {
-        [PSCustomObject]@{
-            DisplayName       = $User.DisplayName
-            UserPrincipalName = $User.UserPrincipalName
-            MFARegistered     = "Unknown"
-            Methods           = $_.Exception.Message
-        }
-    }
-}
-
-if ($OutputPath) {
-    $Results | Export-Csv `
-        -Path $OutputPath `
-        -NoTypeInformation `
-        -Encoding UTF8
-}
-
-$Results
+})
+Write-LabReport -Data $data -OutputPath $OutputPath
